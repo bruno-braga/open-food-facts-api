@@ -11,7 +11,7 @@ Primeiramente comecei investigando a API open food facts através dos links no R
 
 ### 1.1 Por onde começar
 
-    Sendo assim decidi que de inicio seria legal já ir criando uma migration para uma tabela products de acordo com o arquivo products.json e a partir daí poderia começar o desenvolvimento de um comando laravel para que seja possível importar os dados através dos links a seguir:
+Sendo assim decidi que de inicio seria legal já ir criando uma migration para uma tabela products de acordo com o arquivo products.json e a partir daí poderia começar o desenvolvimento de um comando laravel para que seja possível importar os dados através dos links a seguir:
 
-> https://challenges.coode.sh/food/data/json/index.txt
-> https://challenges.coode.sh/food/data/json/{filename}
+https://challenges.coode.sh/food/data/json/index.txt
+https://challenges.coode.sh/food/data/json/{filename}
