@@ -41,7 +41,7 @@ class ImportProductsCommand extends Command
             $fileArray = explode(PHP_EOL, $res->body());
             foreach($fileArray as $key => $file) {
                 $stringIsNotEmpty = strlen($file) > 0;
-                if ($stringIsNotEmpty && $key == 0) {
+                if ($stringIsNotEmpty) {
                     ImportProducts::dispatch($file);
                 }
             }

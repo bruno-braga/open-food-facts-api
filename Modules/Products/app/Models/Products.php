@@ -46,10 +46,21 @@ class Products extends Model
      * @var array
      */
     protected $casts = [
-        'imported_t' => 'datetime',
-        'created_t' => 'integer',
+        'code' => 'integer',
+        // 'imported_t' => 'datetime',
+        // 'created_t' => 'integer',
         'last_modified_t' => 'integer',
         'serving_quantity' => 'float',
         'nutriscore_score' => 'integer',
     ];
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    public function getFillable(): array
+    {
+        return $this->fillable;
+    }
 }

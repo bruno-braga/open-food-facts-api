@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -13,10 +14,10 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('code')->unique();
+            $table->string('code')->unique();
             $table->string('status');
             $table->timestamp('imported_t');
-            $table->string('url');
+            $table->text('url');
             $table->string('creator');
             $table->integer('created_t');
             $table->integer('last_modified_t');
@@ -32,11 +33,13 @@ return new class extends Migration
             $table->text('traces')->nullable();
             $table->string('serving_size');
             $table->decimal('serving_quantity', 8, 2);
-            $table->integer('nutriscore_score');
+            $table->string('nutriscore_score', 2);
             $table->string('nutriscore_grade');
             $table->string('main_category');
             $table->string('image_url');
             $table->timestamps();
+
+            $table->foreignId('file_id')->references('id')->on('files');
         });
     }
 

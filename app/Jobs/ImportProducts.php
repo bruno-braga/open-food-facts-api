@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Modules\Products\Services\ProductsServiceInterface;
 
 class ImportProducts implements ShouldQueue
 {
@@ -26,8 +27,17 @@ class ImportProducts implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(GzstreamServiceInterface $gzstreamService): void
+    public function handle(
+        GzstreamServiceInterface $gzstreamService,
+        ProductsServiceInterface $productsService
+    ): void
     {
-        $gzstreamService->readFile($this->fileName);
+        $data = $gzstreamService->readFile($this->fileName);
+        if (sizeof($data) == 0) {
+            throw new \Exception('data cannot be empty');
+        }
+
+        $fileNameId = $productsService->getFileNameId($this->fileName);
+        $productsService->save($data, $fileNameId);
     }
 }

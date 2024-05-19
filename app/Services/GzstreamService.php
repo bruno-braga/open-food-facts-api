@@ -14,11 +14,18 @@ class GzstreamService implements GzstreamServiceInterface
 
     private const FILES_PATH = 'products_gz/';
 
-    private const MAX_PRODUCTS = 1;
+    private const MAX_PRODUCTS = 100;
 
     private array $data = [];
 
-    public function readFile(string $fileName): void {
+    /**
+     * 
+     *
+     * @param string $fileName
+     * @throws RequestException
+     * @return array
+     */
+    public function readFile(string $fileName): array {
         try {
             $res = Http::get(self::FILE_URL . $fileName);
             $res->throwUnlessStatus(Response::HTTP_OK);
@@ -31,18 +38,25 @@ class GzstreamService implements GzstreamServiceInterface
             $file = storage_path() . '/app/' . self::FILES_PATH . $fileName;
             $stream = gzopen($file, 'r');
 
-            for ($line = 1; $line == self::MAX_PRODUCTS; $line++) { 
-                echo $line . PHP_EOL;
-                $this->data[$line] = json_decode(fgets($stream));
+            for ($line = 1; $line <= self::MAX_PRODUCTS; $line++) { 
+                $this->data[$line] = json_decode(fgets($stream), true);
             }
 
             fclose($stream);
 
+            $isDeleted = true;
             if (Storage::disk('productsgz')->exists($fileName)) {
-                Storage::disk('productsgz')->delete($fileName);
+                $isDeleted = Storage::disk('productsgz')->delete($fileName);
             }
+
+            if ($isDeleted) {
+                return $this->data;
+            }
+
+            $res->throw();
         } catch (RequestException $e) {
             Log::error($e);
+            return [];
         }
     }
 }
