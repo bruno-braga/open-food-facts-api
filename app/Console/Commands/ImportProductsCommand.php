@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\ImportProducts;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Response;
@@ -24,8 +25,6 @@ class ImportProductsCommand extends Command
      */
     protected $description = 'Command description';
 
-    private $fileList = [];
-
     private const PRODUCTS_FILE_LIST = 'https://challenges.coode.sh/food/data/json/index.txt';
 
     /**
@@ -40,9 +39,10 @@ class ImportProductsCommand extends Command
             $res->throwUnlessStatus(Response::HTTP_OK);
 
             $fileArray = explode(PHP_EOL, $res->body());
-            foreach($fileArray as $file) {
-                if (strlen($file) > 0) {
-                    $this->fileList[] = $file;
+            foreach($fileArray as $key => $file) {
+                $stringIsNotEmpty = strlen($file) > 0;
+                if ($stringIsNotEmpty && $key == 0) {
+                    ImportProducts::dispatch($file);
                 }
             }
         } catch(RequestException $e) {
