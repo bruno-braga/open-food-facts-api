@@ -58,5 +58,5 @@ Decidi colocar um file_id na tabela de produtos e adicionar uma tabela auxiliar 
 
 A seguir um diagrama de sequencia e um ER do banco de dados:
 
-[ER](./er.png)
-[Diagrama de sequência](./ds.png)
+![ER](./er.png)
+![Diagrama de sequência](./ds.png)
