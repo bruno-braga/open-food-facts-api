@@ -17,6 +17,6 @@ class Files extends Model
 
     protected static function newFactory(): FilesFactory
     {
-        //return FilesFactory::new();
+        return FilesFactory::new();
     }
 }

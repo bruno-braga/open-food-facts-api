@@ -8,6 +8,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Modules\Products\Services\ProductsServiceInterface;
 
 class ImportProducts implements ShouldQueue
@@ -37,7 +39,21 @@ class ImportProducts implements ShouldQueue
             throw new \Exception('data cannot be empty');
         }
 
-        $fileNameId = $productsService->getFileNameId($this->fileName);
-        $productsService->save($data, $fileNameId);
+        try {
+            DB::beginTransaction();
+
+            $fileNameId = $productsService->getFileNameId($this->fileName);
+
+            $productsService->saveHistory($fileNameId);
+            $productsService->setAsDraft($fileNameId);
+            $productsService->delete($fileNameId);
+
+            $productsService->save($data, $fileNameId);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollback();
+        }
     }
 }

@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->string('code')->unique();
+        Schema::create('products_histories', function (Blueprint $table) {
+            $table->integer('id');
+            $table->integer('file_id');
+            $table->string('code');
             $table->enum('status', ['published', 'trash', 'draft'])->default('trash');
             $table->timestamp('imported_t');
             $table->text('url');
@@ -38,8 +38,6 @@ return new class extends Migration
             $table->string('main_category');
             $table->string('image_url');
             $table->timestamps();
-
-            $table->foreignId('file_id')->references('id')->on('files');
         });
     }
 
@@ -48,6 +46,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('products_histories');
     }
 };

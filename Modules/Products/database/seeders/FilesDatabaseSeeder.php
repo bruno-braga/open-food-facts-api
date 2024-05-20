@@ -5,7 +5,7 @@ namespace Modules\Products\Database\Seeders;
 use Illuminate\Database\Seeder;
 use Modules\Products\Models\Files;
 
-class ProductsDatabaseSeeder extends Seeder
+class FilesDatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -23,5 +23,6 @@ class ProductsDatabaseSeeder extends Seeder
             ['name' => 'products_08.json.gz'],
             ['name' => 'products_09.json.gz'],
         ]);
+        // $this->call([]);
     }
 }
