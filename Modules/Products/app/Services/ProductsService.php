@@ -201,4 +201,19 @@ class ProductsService implements ProductsServiceInterface
             ->where(['code' => $code])
             ->simplePaginate();
     }
+
+    /**
+     * Set products status = to trash
+     *
+     * @param string $code
+     * @return void
+     */
+    public function setStatus(string $code)
+    {
+         return $this->productModel
+            ->where(['status' => self::PUBLISHED])
+            ->where(['code' => $code])
+            ->update(['status' => self::TRASH]);
+       
+    }
 }

@@ -48,7 +48,7 @@ class ProductsController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show(Request $req, string $code)
+    public function show(string $code)
     {
         return response()->json(
             new ProductsResource($this->productsService->getById($code))
@@ -74,8 +74,8 @@ class ProductsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $code)
     {
-        //
+        $this->productsService->setStatus($code);
     }
 }
