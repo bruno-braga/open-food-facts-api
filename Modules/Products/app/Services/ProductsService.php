@@ -121,8 +121,7 @@ class ProductsService implements ProductsServiceInterface
     }
 
     /**
-     * Saves all published products to the history table
-     * changing its statsu to "trash" where file_id => $fileId
+     * Saves all products to the history table
      *
      * @param integer $fileId
      * @return void
@@ -133,19 +132,13 @@ class ProductsService implements ProductsServiceInterface
         Log::channel('importer')->info("1. Saving products from fileId {$fileId} to history");
         $products = $this->productModel::where([
             'file_id' => $fileId,
-            'status' => self::PUBLISHED
         ])->get();
 
         if ($products->count() == 0) {
             return '';
         }
 
-        $trashProducts = $products->map(function($product) {
-            $product->status = self::TRASH;
-            return $product;
-        });
-
-        $this->productHistoryModel::insert($trashProducts->toArray());
+        $this->productHistoryModel::insert($products->toArray());
     }
 
     /**
