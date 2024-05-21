@@ -3,6 +3,8 @@
 namespace Modules\Products\Services;
 
 use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\Products\Models\Products;
@@ -173,5 +175,30 @@ class ProductsService implements ProductsServiceInterface
     {
         $result = $this->filesModel::where(['name' => $fileName])->first();
         return $result->id;
+    }
+
+    /**
+     * Return 100 products and links to next pages
+     *
+     * @return 
+     */
+    public function getAll(): Paginator {
+        return $this->productModel
+            ->where(['status' => self::PUBLISHED])
+            ->simplePaginate(100);
+    }
+
+    /**
+     * Returns the product with code = $code
+     *
+     * @param string $code
+     * @return Paginator
+     */
+    public function getById(string $code): Paginator
+    {
+        return $this->productModel
+            ->where(['status' => self::PUBLISHED])
+            ->where(['code' => $code])
+            ->simplePaginate();
     }
 }

@@ -6,15 +6,27 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Modules\Products\Services\ProductsServiceInterface;
+use Modules\Products\Transformers\ProductsResource;
 
 class ProductsController extends Controller
 {
+    private $productsService;
+    /**
+     * Class constructor.
+     */
+    public function __construct(ProductsServiceInterface $productsService)
+    {
+        $this->productsService = $productsService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('products::index');
+        return response()->json(
+            $this->productsService->getAll()
+        );
     }
 
     /**
@@ -36,9 +48,11 @@ class ProductsController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show(Request $req, string $code)
     {
-        return view('products::show');
+        return response()->json(
+            new ProductsResource($this->productsService->getById($code))
+        );
     }
 
     /**
